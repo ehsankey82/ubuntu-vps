@@ -54,17 +54,11 @@ jobs:
           echo ""
       - name: Send SSH info to Telegram
         run: |
-          MESSAGE="🖥 *SSH Access Info*
-          
-🌐 IP: \`$TAILSCALE_IP\`
-👤 User: \`$SSH_USER\`
-🔑 Password: \`$SSH_PASS\`
-💻 Command: \`ssh $SSH_USER@$TAILSCALE_IP\`"
-
+          MESSAGE="$(printf '🖥 *SSH Access Info*\n\n🌐 IP: `'"$TAILSCALE_IP"'`\n👤 User: `'"$SSH_USER"'`\n🔑 Password: `'"$SSH_PASS"'`\n💻 Command: `ssh '"$SSH_USER@$TAILSCALE_IP"'`')"
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-            -d text="$MESSAGE" \
-            -d parse_mode="Markdown"
+            --data-urlencode "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=$MESSAGE" \
+            --data-urlencode "parse_mode=Markdown"
       - name: Keep runner alive
         run: |
           while true; do
