@@ -1,4 +1,4 @@
-name: Ubuntu SSH Password with Tailscale 
+name: Ubuntu SSH Password with Tailscale
 
 on:
   workflow_dispatch:
